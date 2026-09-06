@@ -483,3 +483,29 @@ graph TB
 | AC30 | Given chọn khoảng thời gian, When yêu cầu báo cáo, Then trả đúng số liệu |
 
 > **Ghi chú:** Một số AC còn giá trị SLA tạm thời, cần BA xác nhận với stakeholder trước khi chốt test case chính thức.
+## 🔗 Bảng truy vết (Traceability Matrix)
+
+**Chú giải BJ (Business Objective):**
+- BJ01 – Tăng năng lực phục vụ
+- BJ02 – Tự động hóa vận hành
+- BJ03 – Minh bạch & trải nghiệm khách hàng
+- BJ04 – Tập trung hóa dữ liệu vận hành
+- BJ05 – Sẵn sàng mở rộng lâu dài
+
+| BJ | BR | BPM | FR | UC | AC |
+|---|---|---|---|---|---|
+| BJ03 | BR01 | A | FR01, FR02, FR03 | UC01, UC02 | AC01, AC02, AC03 |
+| BJ02, BJ03 | BR02 | A | FR04, FR05, FR06 | UC03 | AC04, AC05, AC06 |
+| BJ03 | BR03 | B, C, F, G, H, I, J | FR07, FR08, FR09, FR10 | UC04 | AC07, AC08, AC09 |
+| BJ03, BJ04 | BR04 | Q, R | FR11, FR12, FR13 | UC05, UC06 | AC10, AC11, AC12 |
+| BJ01, BJ02 | BR05 | — | FR14, FR15 | UC08 | AC13, AC14 |
+| BJ02, BJ03 | BR06 | C, D, F, G, H, I, J, K | FR16, FR17, FR18, FR19 | UC09, UC10, UC11 | AC15, AC16, AC17, AC18 |
+| BJ01, BJ02 | BR07 | B, D, E | FR20, FR21, FR22, FR23 | UC12 | AC19, AC20 |
+| BJ04 | BR08 | K, L | FR24, FR25 | UC13 | AC21 |
+| BJ02, BJ03 | BR09 | M, N, O | FR26, FR27, FR28, FR29 | UC07 | AC22, AC23, AC24 |
+| BJ03, BJ05 | BR10 | C, F, G, K, P | FR30, FR31, FR32 | UC19 | AC25, AC26 |
+| BJ04 | BR11 | S | FR33, FR34, FR35, FR36 | UC14, UC15, UC16, UC17 | AC27 |
+| BJ04, BJ01 | BR12 | — | FR37, FR38, FR39, FR40 | UC18 | AC30 |
+| BJ04, BJ05 | BR13 | — | FR41, FR42, FR43 | — | AC28, AC29 |
+
+> **Ghi chú:** BR13 là yêu cầu xuyên suốt (cross-cutting), áp dụng cho hầu hết các UC nên không gắn riêng cột UC.
