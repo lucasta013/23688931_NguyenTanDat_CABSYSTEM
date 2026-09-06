@@ -345,3 +345,141 @@ erDiagram
         datetime performed_at
     }
 ```
+
+
+## 🧩 Use Case Diagram
+
+```mermaid
+graph TB
+    Customer([Khách hàng])
+    Driver([Tài xế])
+    Staff([Nhân viên vận hành])
+    Payment_GW([Cổng thanh toán])
+    Notify_SV([Dịch vụ thông báo])
+
+    UC01[Đăng ký / Đăng nhập]
+    UC02[Cập nhật thông tin cá nhân]
+    UC03[Đặt chuyến đi]
+    UC04[Theo dõi chuyến đi]
+    UC05[Xem lịch sử chuyến đi]
+    UC06[Đánh giá tài xế]
+    UC07[Thanh toán chuyến đi]
+    UC08[Đăng ký / Cập nhật hồ sơ và phương tiện]
+    UC09[Chuyển trạng thái hoạt động]
+    UC10[Nhận hoặc từ chối lời mời chuyến]
+    UC11[Cập nhật tiến trình chuyến đi]
+    UC12[Tìm và phân công tài xế]
+    UC13[Tính cước chuyến đi]
+    UC14[Quản lý khách hàng, tài xế, phương tiện]
+    UC15[Giám sát chuyến đi thời gian thực]
+    UC16[Xử lý sự cố chuyến đi]
+    UC17[Tra cứu lịch sử giao dịch]
+    UC18[Xem báo cáo vận hành và kinh doanh]
+    UC19[Gửi thông báo]
+
+    Customer --> UC01
+    Customer --> UC02
+    Customer --> UC03
+    Customer --> UC04
+    Customer --> UC05
+    Customer --> UC06
+    Customer --> UC07
+
+    Driver --> UC01
+    Driver --> UC08
+    Driver --> UC09
+    Driver --> UC10
+    Driver --> UC11
+
+    Staff --> UC14
+    Staff --> UC15
+    Staff --> UC16
+    Staff --> UC17
+    Staff --> UC18
+
+    UC03 -. "include" .-> UC12
+    UC03 -. "include" .-> UC19
+    UC11 -. "include" .-> UC13
+    UC13 -. "include" .-> UC07
+    UC10 -. "extend" .-> UC12
+    UC16 -. "extend" .-> UC04
+
+    UC07 --> Payment_GW
+    UC19 --> Notify_SV
+```
+
+
+
+## ✅ Acceptance Criteria (AC)
+
+### Tài khoản & Xác thực
+| Mã | Acceptance Criteria |
+|---|---|
+| AC01 | Given chưa có tài khoản, When đăng ký với thông tin hợp lệ + OTP, Then tạo tài khoản thành công |
+| AC02 | Given SĐT/email đã tồn tại, When đăng ký lại, Then hệ thống từ chối |
+| AC03 | Given đã có tài khoản, When cập nhật thông tin hợp lệ, Then lưu và hiển thị đúng |
+
+### Đặt chuyến đi
+| Mã | Acceptance Criteria |
+|---|---|
+| AC04 | Given đủ điểm đón/đến/loại xe, When gửi yêu cầu, Then hệ thống chấp nhận |
+| AC05 | Given thiếu thông tin, When gửi yêu cầu, Then hệ thống chặn và báo lỗi |
+| AC06 | Given đang có chuyến active, When tạo thêm, Then hệ thống từ chối |
+
+### Theo dõi trạng thái
+| Mã | Acceptance Criteria |
+|---|---|
+| AC07 | Given vừa gửi yêu cầu, When đang tìm tài xế, Then hiển thị trạng thái tìm kiếm |
+| AC08 | Given tài xế đã nhận chuyến, When cập nhật, Then hiển thị đúng thông tin tài xế & ETA |
+| AC09 | Given chuyến đang diễn ra, When trạng thái đổi, Then cập nhật real-time cho khách hàng |
+
+### Lịch sử & Đánh giá
+| Mã | Acceptance Criteria |
+|---|---|
+| AC10 | Given đã hoàn thành chuyến, When xem lịch sử, Then hiển thị đầy đủ, đúng thứ tự |
+| AC11 | Given chuyến chưa đánh giá, When gửi đánh giá, Then lưu đúng tài xế/chuyến |
+| AC12 | Given đã đánh giá, When đánh giá lại, Then hệ thống chặn |
+
+### Hồ sơ tài xế
+| Mã | Acceptance Criteria |
+|---|---|
+| AC13 | Given đăng ký mới đủ hồ sơ, When gửi, Then tài khoản ở trạng thái chờ duyệt |
+| AC14 | Given đã duyệt, When cập nhật hồ sơ, Then lưu đúng thay đổi |
+
+### Nhận/Từ chối & Cập nhật chuyến
+| Mã | Acceptance Criteria |
+|---|---|
+| AC15 | Given tài xế sẵn sàng, When có chuyến phù hợp, Then nhận thông báo mời chuyến |
+| AC16 | Given nhận lời mời, When chấp nhận đúng hạn, Then chuyến được gán, khách hàng được báo |
+| AC17 | Given từ chối/không phản hồi, When hết thời gian chờ, Then tự động chuyển tài xế khác |
+| AC18 | Given chuyến đã gán, When cập nhật tiến trình, Then không cho bỏ bước |
+
+### Tìm & Phân công tài xế
+| Mã | Acceptance Criteria |
+|---|---|
+| AC19 | Given nhiều tài xế sẵn sàng, When tìm kiếm, Then ưu tiên tài xế gần & phù hợp nhất |
+| AC20 | Given hết tài xế phù hợp, When tìm kiếm kết thúc, Then thông báo khách hàng rõ ràng |
+
+### Tính cước & Thanh toán
+| Mã | Acceptance Criteria |
+|---|---|
+| AC21 | Given chuyến hoàn thành, When tính cước, Then số tiền đúng công thức |
+| AC22 | Given thanh toán điện tử, When xử lý qua cổng ngoài, Then không lưu dữ liệu nhạy cảm |
+| AC23 | Given giao dịch thất bại, When nhận lỗi, Then thông báo & cho thử lại |
+| AC24 | Given thanh toán tiền mặt, When tài xế xác nhận, Then trạng thái chuyển hoàn tất |
+
+### Thông báo
+| Mã | Acceptance Criteria |
+|---|---|
+| AC25 | Given 1 trong 5 mốc sự kiện xảy ra, When ghi nhận, Then gửi thông báo tương ứng |
+| AC26 | Given lỗi module thông báo, When gửi thất bại, Then luồng chính vẫn hoạt động |
+
+### Quản trị vận hành
+| Mã | Acceptance Criteria |
+|---|---|
+| AC27 | Given nhân viên có quyền, When truy cập trang quản trị, Then thấy đủ dữ liệu |
+| AC28 | Given nhân viên thường, When thao tác nhạy cảm, Then bị từ chối |
+| AC29 | Given thao tác nhạy cảm hoàn tất, When ghi nhận, Then log đầy đủ |
+| AC30 | Given chọn khoảng thời gian, When yêu cầu báo cáo, Then trả đúng số liệu |
+
+> **Ghi chú:** Một số AC còn giá trị SLA tạm thời, cần BA xác nhận với stakeholder trước khi chốt test case chính thức.
