@@ -107,3 +107,51 @@ Q --> R[Lưu lịch sử chuyến đi]
 S[Nhân viên vận hành giám sát và xử lý sự cố] -.-> G
 S -.-> K
 ```
+
+## ⚙️ Functional Requirements (FR)
+
+| BR | FR | Functional Requirement |
+|---|---|---|
+| BR01 | FR01 | Đăng ký tài khoản bằng số điện thoại/email |
+| BR01 | FR02 | Đăng nhập bằng tài khoản đã đăng ký |
+| BR01 | FR03 | Cập nhật thông tin cá nhân |
+| BR02 | FR04 | Nhập điểm đón và điểm đến trên bản đồ |
+| BR02 | FR05 | Lựa chọn loại xe, hiển thị giá ước tính |
+| BR02 | FR06 | Gửi yêu cầu đặt xe |
+| BR03 | FR07 | Hiển thị trạng thái đang tìm tài xế |
+| BR03 | FR08 | Hiển thị thông tin tài xế đã nhận chuyến |
+| BR03 | FR09 | Hiển thị thời gian dự kiến tài xế đến (ETA) |
+| BR03 | FR10 | Cập nhật trạng thái chuyến real-time |
+| BR04 | FR11 | Xem lịch sử chuyến đi |
+| BR04 | FR12 | Xem chi tiết một chuyến đi |
+| BR04 | FR13 | Đánh giá và nhận xét tài xế |
+| BR05 | FR14 | Đăng ký/khởi tạo tài khoản tài xế |
+| BR05 | FR15 | Cập nhật hồ sơ & thông tin phương tiện |
+| BR05 | FR16 | Chuyển trạng thái hoạt động của tài xế |
+| BR06 | FR17 | Gửi thông báo mời chuyến đến tài xế |
+| BR06 | FR18 | Chấp nhận/từ chối lời mời chuyến |
+| BR06 | FR19 | Cập nhật tiến trình chuyến đi |
+| BR07 | FR20 | Ghi nhận vị trí tài xế real-time (GPS) |
+| BR07 | FR21 | Xác định tài xế phù hợp theo vị trí & trạng thái |
+| BR07 | FR22 | Tự động chuyển tài xế khác nếu bị từ chối |
+| BR07 | FR23 | Thông báo khi không tìm được tài xế |
+| BR08 | FR24 | Tính cước chuyến đi tự động |
+| BR08 | FR25 | Hiển thị chi tiết cước phí sau chuyến |
+| BR09 | FR26 | Chọn phương thức thanh toán (tiền mặt/điện tử) |
+| BR09 | FR27 | Tích hợp cổng thanh toán bên ngoài |
+| BR09 | FR28 | Không lưu thông tin thẻ/tài khoản thanh toán |
+| BR09 | FR29 | Xử lý khi giao dịch thanh toán thất bại |
+| BR10 | FR30 | Thông báo khách hàng theo các mốc sự kiện |
+| BR10 | FR31 | Thông báo tài xế khi có chuyến mới/thay đổi |
+| BR10 | FR32 | Kiến trúc module hóa để mở rộng kênh thông báo |
+| BR11 | FR33 | Giao diện quản trị khách hàng/tài xế/phương tiện |
+| BR11 | FR34 | Xem chuyến đi đang diễn ra real-time |
+| BR11 | FR35 | Xử lý sự cố chuyến đi |
+| BR11 | FR36 | Tra cứu lịch sử giao dịch |
+| BR12 | FR37 | Báo cáo số lượng chuyến đi |
+| BR12 | FR38 | Báo cáo doanh thu |
+| BR12 | FR39 | Báo cáo tỷ lệ hoàn thành/hủy chuyến |
+| BR12 | FR40 | Báo cáo hiệu quả hoạt động tài xế |
+| BR13 | FR41 | Xác thực người dùng trước khi truy cập chức năng |
+| BR13 | FR42 | Phân quyền chức năng theo vai trò |
+| BR13 | FR43 | Ghi log thao tác quan trọng (audit trail) |
