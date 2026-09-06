@@ -155,3 +155,193 @@ S -.-> K
 | BR13 | FR41 | Xác thực người dùng trước khi truy cập chức năng |
 | BR13 | FR42 | Phân quyền chức năng theo vai trò |
 | BR13 | FR43 | Ghi log thao tác quan trọng (audit trail) |
+
+
+## 📐 Business Rules (Quy tắc nghiệp vụ)
+
+### 1. Tài khoản & Xác thực
+| Mã | Business Rule |
+|---|---|
+| RN01 | Phải xác thực trước khi dùng chức năng yêu cầu tài khoản |
+| RN02 | Một SĐT/email chỉ đăng ký được 1 tài khoản khách hàng hoặc 1 tài khoản tài xế |
+| RN03 | Tài xế phải được xác minh hồ sơ & phương tiện mới được nhận chuyến |
+
+### 2. Đặt chuyến đi
+| Mã | Business Rule |
+|---|---|
+| RN04 | Khách hàng chỉ có 1 yêu cầu đặt xe active tại một thời điểm |
+| RN05 | Yêu cầu đặt xe phải đủ điểm đón, điểm đến, loại xe |
+| RN06 | Giá ước tính chỉ tham khảo, giá cuối tính lại sau khi hoàn thành chuyến |
+
+### 3. Tìm & phân công tài xế
+| Mã | Business Rule |
+|---|---|
+| RN07 | Chỉ tài xế "sẵn sàng" mới được xét nhận chuyến |
+| RN08 | Ưu tiên tài xế gần nhất, sau đó theo tiêu chí vận hành khác |
+| RN09 | Tài xế không phản hồi trong thời gian quy định = từ chối |
+| RN10 | Tự động chuyển tài xế khác khi bị từ chối, không cần khách hàng tạo lại yêu cầu |
+| RN11 | Hết tài xế phù hợp → thông báo khách hàng |
+| RN12 | Một tài xế chỉ nhận tối đa 1 chuyến active |
+
+### 4. Thực hiện chuyến đi
+| Mã | Business Rule |
+|---|---|
+| RN13 | Trạng thái chuyến phải cập nhật tuần tự, không bỏ bước |
+| RN14 | Chỉ tài xế được gán mới có quyền cập nhật trạng thái chuyến đó |
+| RN15 | Chuyến hoàn thành khi tài xế xác nhận trạng thái cuối |
+
+### 5. Tính cước & Thanh toán
+| Mã | Business Rule |
+|---|---|
+| RN16 | Cước chỉ tính sau khi chuyến hoàn thành |
+| RN17 | Công thức cước phụ thuộc loại xe, quãng đường, thời gian |
+| RN18 | Không lưu trực tiếp thông tin thẻ/tài khoản thanh toán trong hệ thống CAB |
+| RN19 | Thanh toán thất bại → chuyến vẫn hoàn thành, trạng thái thanh toán "chưa hoàn tất" |
+| RN20 | *(Cần xác nhận)* Có giới hạn đặt xe mới khi còn giao dịch chưa hoàn tất không |
+
+### 6. Thông báo
+| Mã | Business Rule |
+|---|---|
+| RN21 | Khách hàng nhận thông báo tại 5 mốc sự kiện chuyến đi |
+| RN22 | Tài xế nhận thông báo khi có chuyến mới/thay đổi |
+| RN23 | Module thông báo độc lập, lỗi không ảnh hưởng luồng chính |
+
+### 7. Quản trị & Phân quyền
+| Mã | Business Rule |
+|---|---|
+| RN24 | Nhân viên thường chỉ xem, không thao tác nhạy cảm |
+| RN25 | Chỉ quản lý cấp cao mới thao tác nhạy cảm |
+| RN26 | Thao tác nhạy cảm phải ghi log đầy đủ |
+
+### 8. Vận hành hệ thống
+| Mã | Business Rule |
+|---|---|
+| RN27 | Lỗi thanh toán/thông báo không được ảnh hưởng module đặt xe |
+| RN28 | *(Cần xác nhận)* Tần suất cập nhật vị trí tài xế |
+
+> **Ghi chú:** RN20, RN28 là các điểm chưa chốt, cần BA làm rõ với stakeholder.
+
+
+
+## 📌 Non-Functional Requirements (NFR)
+
+| Mã | Nhóm | Yêu cầu |
+|---|---|---|
+| NFR01 | Hiệu năng | Xử lý tìm & phân công tài xế gần real-time kể cả khi tải tăng đột biến |
+| NFR02 | Khả năng mở rộng | Các module mở rộng độc lập theo tải |
+| NFR03 | Độ sẵn sàng | Hoạt động liên tục giờ cao điểm; lỗi module phụ không ảnh hưởng module chính |
+| NFR04 | Chịu lỗi | Tự phục hồi khi tài xế không phản hồi/mất kết nối |
+| NFR05 | Bảo mật | Mã hoá dữ liệu cá nhân/vị trí/giao dịch; không lưu thông tin thanh toán nhạy cảm |
+| NFR06 | Kiểm soát truy cập | Phân quyền theo vai trò |
+| NFR07 | Truy vết | Ghi log đầy đủ thao tác quản trị quan trọng |
+| NFR08 | Khả năng bảo trì | Dễ mở rộng dịch vụ/thanh toán/thông báo mới |
+| NFR09 | Khả năng triển khai | Hỗ trợ triển khai từng phần, giảm rủi ro phát hành |
+| NFR10 | Trải nghiệm người dùng | Giao diện đơn giản, thao tác tối thiểu |
+| NFR11 | Độ chính xác vị trí | Cập nhật vị trí tài xế đủ thường xuyên |
+| NFR12 | Tương thích tích hợp | Tích hợp cổng thanh toán & bên thứ 3 qua API chuẩn |
+
+## 🗄️ ERD – Thiết kế thực thể dữ liệu
+
+```mermaid
+erDiagram
+    CUSTOMER ||--o{ TRIP : places
+    DRIVER ||--o{ TRIP : fulfills
+    DRIVER ||--o{ VEHICLE : owns
+    DRIVER ||--o{ DRIVERLOCATION : has
+    TRIP ||--o{ TRIPSTATUSHISTORY : has
+    TRIP ||--|| PAYMENT : has
+    TRIP ||--o| RATING : receives
+    TRIP ||--o{ NOTIFICATION : triggers
+    STAFF ||--o{ AUDITLOG : performs
+
+    CUSTOMER {
+        string customer_id PK
+        string full_name
+        string phone
+        string email
+        string status
+    }
+
+    DRIVER {
+        string driver_id PK
+        string full_name
+        string phone
+        string license_number
+        string status
+    }
+
+    VEHICLE {
+        string vehicle_id PK
+        string driver_id FK
+        string plate_number
+        string vehicle_type
+        string status
+    }
+
+    STAFF {
+        string staff_id PK
+        string full_name
+        string role
+    }
+
+    TRIP {
+        string trip_id PK
+        string customer_id FK
+        string driver_id FK
+        string pickup_location
+        string dropoff_location
+        string vehicle_type
+        string status
+        datetime created_at
+        datetime completed_at
+    }
+
+    TRIPSTATUSHISTORY {
+        string history_id PK
+        string trip_id FK
+        string status
+        datetime changed_at
+    }
+
+    DRIVERLOCATION {
+        string location_id PK
+        string driver_id FK
+        float latitude
+        float longitude
+        datetime recorded_at
+    }
+
+    PAYMENT {
+        string payment_id PK
+        string trip_id FK
+        float amount
+        string method
+        string status
+        datetime paid_at
+    }
+
+    RATING {
+        string rating_id PK
+        string trip_id FK
+        int score
+        string comment
+    }
+
+    NOTIFICATION {
+        string notification_id PK
+        string trip_id FK
+        string recipient_type
+        string recipient_id
+        string message
+        string channel
+        datetime sent_at
+    }
+
+    AUDITLOG {
+        string log_id PK
+        string staff_id FK
+        string action
+        string target_entity
+        datetime performed_at
+    }
+```
