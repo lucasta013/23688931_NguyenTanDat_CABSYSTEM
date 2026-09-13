@@ -1,0 +1,22 @@
+/users/me/notifications:
+  get:
+    tags:
+    - Notifications
+    summary: Xem danh sách thông báo đã nhận (FR30, FR31, UC19)
+    parameters:
+    - $ref: ../components/parameters.yaml#/PageParam
+    - $ref: ../components/parameters.yaml#/LimitParam
+    responses:
+      '200':
+        description: Danh sách thông báo
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: ../components/schemas.yaml#/Notification
+                meta:
+                  $ref: ../components/schemas.yaml#/PageMeta
