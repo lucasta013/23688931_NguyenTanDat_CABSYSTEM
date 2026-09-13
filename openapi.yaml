@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+  title: CAB System API
+  description: 'API cho hệ thống đặt xe CAB của công ty ABC. Đặc tả này ánh xạ trực tiếp theo Functional
+    Requirements (FR) và Use Case (UC) trong srs.md.
+
+    '
+  version: 1.0.0
+servers:
+- url: https://api.cabsystem.example.com/api/v1
+  description: Production (placeholder)
+tags:
+- name: Auth
+  description: Xác thực & tài khoản (FR01-FR03)
+- name: Trips
+  description: Đặt chuyến & theo dõi chuyến đi (FR04-FR13)
+- name: Drivers
+  description: Hồ sơ, trạng thái, lời mời chuyến của tài xế (FR14-FR20)
+- name: Payments
+  description: Cước phí & thanh toán (FR24-FR29)
+- name: Notifications
+  description: Thông báo (FR30-FR32)
+- name: Admin
+  description: Quản trị vận hành (FR33-FR36, FR43)
+- name: Reports
+  description: Báo cáo kinh doanh & vận hành (FR37-FR40)
+security:
+- bearerAuth: []
+paths:
+  /auth/register:
+    $ref: ./paths/auth.yaml#/~1auth~1register
+  /auth/login:
+    $ref: ./paths/auth.yaml#/~1auth~1login
+  /users/me:
+    $ref: ./paths/auth.yaml#/~1users~1me
+  /users/me/notifications:
+    $ref: ./paths/notifications.yaml#/~1users~1me~1notifications
+  /trips/estimate:
+    $ref: ./paths/trips.yaml#/~1trips~1estimate
+  /trips:
+    $ref: ./paths/trips.yaml#/~1trips
+  /customers/{customerId}/trips:
+    $ref: ./paths/trips.yaml#/~1customers~1{customerId}~1trips
+  /trips/{tripId}:
+    $ref: ./paths/trips.yaml#/~1trips~1{tripId}
+  /trips/{tripId}/status-history:
+    $ref: ./paths/trips.yaml#/~1trips~1{tripId}~1status-history
+  /trips/{tripId}/status:
+    $ref: ./paths/trips.yaml#/~1trips~1{tripId}~1status
+  /trips/{tripId}/rating:
+    $ref: ./paths/trips.yaml#/~1trips~1{tripId}~1rating
+  /trips/{tripId}/invitations/accept:
+    $ref: ./paths/drivers.yaml#/~1trips~1{tripId}~1invitations~1accept
+  /trips/{tripId}/invitations/reject:
+    $ref: ./paths/drivers.yaml#/~1trips~1{tripId}~1invitations~1reject
+  /drivers/register:
+    $ref: ./paths/drivers.yaml#/~1drivers~1register
+  /drivers/{driverId}/profile:
+    $ref: ./paths/drivers.yaml#/~1drivers~1{driverId}~1profile
+  /drivers/{driverId}/availability:
+    $ref: ./paths/drivers.yaml#/~1drivers~1{driverId}~1availability
+  /drivers/{driverId}/trip-invitations:
+    $ref: ./paths/drivers.yaml#/~1drivers~1{driverId}~1trip-invitations
+  /drivers/{driverId}/location:
+    $ref: ./paths/drivers.yaml#/~1drivers~1{driverId}~1location
+  /trips/{tripId}/fare:
+    $ref: ./paths/payments.yaml#/~1trips~1{tripId}~1fare
+  /trips/{tripId}/payments:
+    $ref: ./paths/payments.yaml#/~1trips~1{tripId}~1payments
+  /payments/{paymentId}:
+    $ref: ./paths/payments.yaml#/~1payments~1{paymentId}
+  /admin/customers:
+    $ref: ./paths/admin.yaml#/~1admin~1customers
+  /admin/drivers:
+    $ref: ./paths/admin.yaml#/~1admin~1drivers
+  /admin/vehicles:
+    $ref: ./paths/admin.yaml#/~1admin~1vehicles
+  /admin/trips/live:
+    $ref: ./paths/admin.yaml#/~1admin~1trips~1live
+  /admin/trips/{tripId}/incidents:
+    $ref: ./paths/admin.yaml#/~1admin~1trips~1{tripId}~1incidents
+  /admin/transactions:
+    $ref: ./paths/admin.yaml#/~1admin~1transactions
+  /admin/audit-logs:
+    $ref: ./paths/admin.yaml#/~1admin~1audit-logs
+  /reports/trips:
+    $ref: ./paths/reports.yaml#/~1reports~1trips
+  /reports/revenue:
+    $ref: ./paths/reports.yaml#/~1reports~1revenue
+  /reports/completion-rate:
+    $ref: ./paths/reports.yaml#/~1reports~1completion-rate
+  /reports/driver-performance:
+    $ref: ./paths/reports.yaml#/~1reports~1driver-performance
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    TripIdParam:
+      $ref: ./components/parameters.yaml#/TripIdParam
+    DriverIdParam:
+      $ref: ./components/parameters.yaml#/DriverIdParam
+    PageParam:
+      $ref: ./components/parameters.yaml#/PageParam
+    LimitParam:
+      $ref: ./components/parameters.yaml#/LimitParam
+    FromDateParam:
+      $ref: ./components/parameters.yaml#/FromDateParam
+    ToDateParam:
+      $ref: ./components/parameters.yaml#/ToDateParam
+  schemas:
+    VehicleType:
+      $ref: ./components/schemas.yaml#/VehicleType
+    PageMeta:
+      $ref: ./components/schemas.yaml#/PageMeta
+    Error:
+      $ref: ./components/schemas.yaml#/Error
+    RegisterRequest:
+      $ref: ./components/schemas.yaml#/RegisterRequest
+    LoginRequest:
+      $ref: ./components/schemas.yaml#/LoginRequest
+    LoginResponse:
+      $ref: ./components/schemas.yaml#/LoginResponse
+    UpdateProfileRequest:
+      $ref: ./components/schemas.yaml#/UpdateProfileRequest
+    Customer:
+      $ref: ./components/schemas.yaml#/Customer
+    Driver:
+      $ref: ./components/schemas.yaml#/Driver
+    Vehicle:
+      $ref: ./components/schemas.yaml#/Vehicle
+    DriverRegisterRequest:
+      $ref: ./components/schemas.yaml#/DriverRegisterRequest
+    DriverProfileUpdateRequest:
+      $ref: ./components/schemas.yaml#/DriverProfileUpdateRequest
+    LocationUpdateRequest:
+      $ref: ./components/schemas.yaml#/LocationUpdateRequest
+    CreateTripRequest:
+      $ref: ./components/schemas.yaml#/CreateTripRequest
+    TripEstimateResponse:
+      $ref: ./components/schemas.yaml#/TripEstimateResponse
+    Trip:
+      $ref: ./components/schemas.yaml#/Trip
+    UpdateTripStatusRequest:
+      $ref: ./components/schemas.yaml#/UpdateTripStatusRequest
+    TripStatusHistory:
+      $ref: ./components/schemas.yaml#/TripStatusHistory
+    FareDetail:
+      $ref: ./components/schemas.yaml#/FareDetail
+    RatingRequest:
+      $ref: ./components/schemas.yaml#/RatingRequest
+    Rating:
+      $ref: ./components/schemas.yaml#/Rating
+    PaymentRequest:
+      $ref: ./components/schemas.yaml#/PaymentRequest
+    Payment:
+      $ref: ./components/schemas.yaml#/Payment
+    Notification:
+      $ref: ./components/schemas.yaml#/Notification
+    IncidentRequest:
+      $ref: ./components/schemas.yaml#/IncidentRequest
+    AuditLog:
+      $ref: ./components/schemas.yaml#/AuditLog
