@@ -1,0 +1,85 @@
+/auth/register:
+  post:
+    tags:
+    - Auth
+    summary: Đăng ký tài khoản (FR01)
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/RegisterRequest
+    responses:
+      '201':
+        description: Tạo tài khoản thành công
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Customer
+      '409':
+        description: SĐT/email đã tồn tại (RN02, AC02)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+/auth/login:
+  post:
+    tags:
+    - Auth
+    summary: Đăng nhập (FR02, UC01)
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/LoginRequest
+    responses:
+      '200':
+        description: Đăng nhập thành công
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/LoginResponse
+      '401':
+        description: Sai thông tin đăng nhập
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+/users/me:
+  get:
+    tags:
+    - Auth
+    summary: Xem thông tin cá nhân (FR03)
+    responses:
+      '200':
+        description: Thông tin người dùng hiện tại
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Customer
+  put:
+    tags:
+    - Auth
+    summary: Cập nhật thông tin cá nhân (FR03, UC02)
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/UpdateProfileRequest
+    responses:
+      '200':
+        description: Cập nhật thành công (AC03)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Customer
+      '400':
+        description: Dữ liệu không hợp lệ
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error

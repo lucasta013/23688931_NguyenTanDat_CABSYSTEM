@@ -1,0 +1,122 @@
+/admin/customers:
+  get:
+    tags:
+    - Admin
+    summary: Danh sách & quản lý khách hàng (FR33, UC14)
+    parameters:
+    - $ref: ../components/parameters.yaml#/PageParam
+    - $ref: ../components/parameters.yaml#/LimitParam
+    responses:
+      '200':
+        description: Danh sách khách hàng (AC27)
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: ../components/schemas.yaml#/Customer
+                meta:
+                  $ref: ../components/schemas.yaml#/PageMeta
+/admin/drivers:
+  get:
+    tags:
+    - Admin
+    summary: Danh sách & quản lý tài xế (FR33, UC14)
+    responses:
+      '200':
+        description: Danh sách tài xế
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: ../components/schemas.yaml#/Driver
+/admin/vehicles:
+  get:
+    tags:
+    - Admin
+    summary: Danh sách & quản lý phương tiện (FR33, UC14)
+    responses:
+      '200':
+        description: Danh sách phương tiện
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: ../components/schemas.yaml#/Vehicle
+/admin/trips/live:
+  get:
+    tags:
+    - Admin
+    summary: Giám sát chuyến đi đang diễn ra real-time (FR34, UC15)
+    responses:
+      '200':
+        description: Danh sách chuyến đang diễn ra
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: ../components/schemas.yaml#/Trip
+/admin/trips/{tripId}/incidents:
+  post:
+    tags:
+    - Admin
+    summary: Ghi nhận & xử lý sự cố chuyến đi (FR35, UC16) — thao tác nhạy cảm (RN25)
+    parameters:
+    - $ref: ../components/parameters.yaml#/TripIdParam
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/IncidentRequest
+    responses:
+      '201':
+        description: Sự cố được ghi nhận, đồng thời tạo audit log (RN26, AC29)
+      '403':
+        description: Nhân viên thường không có quyền thao tác nhạy cảm (RN24, AC28)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+/admin/transactions:
+  get:
+    tags:
+    - Admin
+    summary: Tra cứu lịch sử giao dịch (FR36, UC17)
+    parameters:
+    - $ref: ../components/parameters.yaml#/PageParam
+    - $ref: ../components/parameters.yaml#/LimitParam
+    responses:
+      '200':
+        description: Danh sách giao dịch
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: ../components/schemas.yaml#/Payment
+                meta:
+                  $ref: ../components/schemas.yaml#/PageMeta
+/admin/audit-logs:
+  get:
+    tags:
+    - Admin
+    summary: Xem log thao tác nhạy cảm (FR43, RN26) — chỉ staff_senior
+    responses:
+      '200':
+        description: Danh sách audit log
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: ../components/schemas.yaml#/AuditLog
