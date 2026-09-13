@@ -1,0 +1,64 @@
+/trips/{tripId}/fare:
+  get:
+    tags:
+    - Payments
+    summary: Xem chi tiết cước phí sau chuyến (FR24, FR25, AC21)
+    parameters:
+    - $ref: ../components/parameters.yaml#/TripIdParam
+    responses:
+      '200':
+        description: Chi tiết cước phí
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/FareDetail
+/trips/{tripId}/payments:
+  post:
+    tags:
+    - Payments
+    summary: Thực hiện thanh toán chuyến đi (FR26, FR27, FR29, UC07)
+    parameters:
+    - $ref: ../components/parameters.yaml#/TripIdParam
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/PaymentRequest
+    responses:
+      '200':
+        description: Thanh toán tiền mặt xác nhận hoàn tất (AC24)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Payment
+      '202':
+        description: Đã gửi yêu cầu tới cổng thanh toán điện tử, chờ kết quả (AC22)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Payment
+      '402':
+        description: Giao dịch thất bại, có thể thử lại (RN19, AC23)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+/payments/{paymentId}:
+  get:
+    tags:
+    - Payments
+    summary: Xem trạng thái giao dịch thanh toán (FR29)
+    parameters:
+    - name: paymentId
+      in: path
+      required: true
+      schema:
+        type: string
+    responses:
+      '200':
+        description: Trạng thái thanh toán
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Payment
