@@ -1,0 +1,38 @@
+TripIdParam:
+  name: tripId
+  in: path
+  required: true
+  schema:
+    type: string
+DriverIdParam:
+  name: driverId
+  in: path
+  required: true
+  schema:
+    type: string
+PageParam:
+  name: page
+  in: query
+  schema:
+    type: integer
+    default: 1
+LimitParam:
+  name: limit
+  in: query
+  schema:
+    type: integer
+    default: 20
+FromDateParam:
+  name: from
+  in: query
+  required: true
+  schema:
+    type: string
+    format: date
+ToDateParam:
+  name: to
+  in: query
+  required: true
+  schema:
+    type: string
+    format: date

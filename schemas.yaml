@@ -1,0 +1,380 @@
+VehicleType:
+  type: string
+  enum:
+  - economy
+  - standard
+  - premium
+PageMeta:
+  type: object
+  properties:
+    total:
+      type: integer
+    page:
+      type: integer
+    limit:
+      type: integer
+Error:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+RegisterRequest:
+  type: object
+  required:
+  - full_name
+  - password
+  properties:
+    full_name:
+      type: string
+    phone:
+      type: string
+    email:
+      type: string
+      format: email
+    password:
+      type: string
+      format: password
+    otp:
+      type: string
+      description: Mã OTP xác thực (AC01)
+LoginRequest:
+  type: object
+  required:
+  - password
+  properties:
+    phone_or_email:
+      type: string
+    password:
+      type: string
+      format: password
+LoginResponse:
+  type: object
+  properties:
+    access_token:
+      type: string
+    token_type:
+      type: string
+      example: Bearer
+    user:
+      $ref: '#/Customer'
+UpdateProfileRequest:
+  type: object
+  properties:
+    full_name:
+      type: string
+    phone:
+      type: string
+    email:
+      type: string
+      format: email
+Customer:
+  type: object
+  properties:
+    customer_id:
+      type: string
+    full_name:
+      type: string
+    phone:
+      type: string
+    email:
+      type: string
+    status:
+      type: string
+      enum:
+      - active
+      - inactive
+Driver:
+  type: object
+  properties:
+    driver_id:
+      type: string
+    full_name:
+      type: string
+    phone:
+      type: string
+    license_number:
+      type: string
+    status:
+      type: string
+      enum:
+      - pending_review
+      - available
+      - unavailable
+      - on_trip
+Vehicle:
+  type: object
+  properties:
+    vehicle_id:
+      type: string
+    driver_id:
+      type: string
+    plate_number:
+      type: string
+    vehicle_type:
+      $ref: '#/VehicleType'
+    status:
+      type: string
+      enum:
+      - active
+      - inactive
+DriverRegisterRequest:
+  type: object
+  required:
+  - full_name
+  - phone
+  - license_number
+  - vehicle
+  properties:
+    full_name:
+      type: string
+    phone:
+      type: string
+    license_number:
+      type: string
+    vehicle:
+      type: object
+      properties:
+        plate_number:
+          type: string
+        vehicle_type:
+          $ref: '#/VehicleType'
+DriverProfileUpdateRequest:
+  type: object
+  properties:
+    full_name:
+      type: string
+    phone:
+      type: string
+    vehicle:
+      type: object
+      properties:
+        plate_number:
+          type: string
+        vehicle_type:
+          $ref: '#/VehicleType'
+LocationUpdateRequest:
+  type: object
+  required:
+  - latitude
+  - longitude
+  properties:
+    latitude:
+      type: number
+      format: float
+    longitude:
+      type: number
+      format: float
+CreateTripRequest:
+  type: object
+  required:
+  - pickup_location
+  - dropoff_location
+  - vehicle_type
+  properties:
+    pickup_location:
+      type: string
+    dropoff_location:
+      type: string
+    vehicle_type:
+      $ref: '#/VehicleType'
+TripEstimateResponse:
+  type: object
+  properties:
+    vehicle_type:
+      $ref: '#/VehicleType'
+    estimated_price:
+      type: number
+      format: float
+    estimated_distance_km:
+      type: number
+      format: float
+Trip:
+  type: object
+  properties:
+    trip_id:
+      type: string
+    customer_id:
+      type: string
+    driver_id:
+      type: string
+      nullable: true
+    pickup_location:
+      type: string
+    dropoff_location:
+      type: string
+    vehicle_type:
+      $ref: '#/VehicleType'
+    status:
+      type: string
+      enum:
+      - searching
+      - assigned
+      - arrived
+      - picked_up
+      - in_progress
+      - completed
+      - cancelled
+    eta_minutes:
+      type: integer
+      nullable: true
+    created_at:
+      type: string
+      format: date-time
+    completed_at:
+      type: string
+      format: date-time
+      nullable: true
+UpdateTripStatusRequest:
+  type: object
+  required:
+  - status
+  properties:
+    status:
+      type: string
+      description: Trạng thái kế tiếp trong chuỗi tuần tự (RN13)
+      enum:
+      - arrived
+      - picked_up
+      - in_progress
+      - completed
+TripStatusHistory:
+  type: object
+  properties:
+    history_id:
+      type: string
+    trip_id:
+      type: string
+    status:
+      type: string
+    changed_at:
+      type: string
+      format: date-time
+FareDetail:
+  type: object
+  properties:
+    trip_id:
+      type: string
+    distance_km:
+      type: number
+      format: float
+    duration_minutes:
+      type: integer
+    base_fare:
+      type: number
+      format: float
+    total_amount:
+      type: number
+      format: float
+RatingRequest:
+  type: object
+  required:
+  - score
+  properties:
+    score:
+      type: integer
+      minimum: 1
+      maximum: 5
+    comment:
+      type: string
+Rating:
+  type: object
+  properties:
+    rating_id:
+      type: string
+    trip_id:
+      type: string
+    score:
+      type: integer
+    comment:
+      type: string
+PaymentRequest:
+  type: object
+  required:
+  - method
+  properties:
+    method:
+      type: string
+      enum:
+      - cash
+      - e_wallet
+      - card_gateway
+    gateway_token:
+      type: string
+      description: 'Token một lần từ cổng thanh toán bên thứ 3 (nếu method != cash). Hệ thống KHÔNG lưu
+        số thẻ/tài khoản thanh toán (RN18, FR28).
+
+        '
+Payment:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    trip_id:
+      type: string
+    amount:
+      type: number
+      format: float
+    method:
+      type: string
+      enum:
+      - cash
+      - e_wallet
+      - card_gateway
+    status:
+      type: string
+      enum:
+      - pending
+      - completed
+      - failed
+    paid_at:
+      type: string
+      format: date-time
+      nullable: true
+Notification:
+  type: object
+  properties:
+    notification_id:
+      type: string
+    trip_id:
+      type: string
+      nullable: true
+    recipient_type:
+      type: string
+      enum:
+      - customer
+      - driver
+    message:
+      type: string
+    channel:
+      type: string
+    sent_at:
+      type: string
+      format: date-time
+IncidentRequest:
+  type: object
+  required:
+  - description
+  properties:
+    description:
+      type: string
+    action_taken:
+      type: string
+AuditLog:
+  type: object
+  properties:
+    log_id:
+      type: string
+    staff_id:
+      type: string
+    action:
+      type: string
+    target_entity:
+      type: string
+    performed_at:
+      type: string
+      format: date-time
