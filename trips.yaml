@@ -1,0 +1,180 @@
+/trips/estimate:
+  get:
+    tags:
+    - Trips
+    summary: Xem giá ước tính theo điểm đón/đến/loại xe (FR05)
+    parameters:
+    - name: pickup_location
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: dropoff_location
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: vehicle_type
+      in: query
+      required: true
+      schema:
+        $ref: ../components/schemas.yaml#/VehicleType
+    responses:
+      '200':
+        description: Giá ước tính (chỉ tham khảo — RN06)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/TripEstimateResponse
+/trips:
+  post:
+    tags:
+    - Trips
+    summary: Gửi yêu cầu đặt xe (FR04, FR05, FR06, UC03)
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/CreateTripRequest
+    responses:
+      '201':
+        description: Yêu cầu được chấp nhận, hệ thống bắt đầu tìm tài xế (AC04)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Trip
+      '400':
+        description: Thiếu điểm đón/đến/loại xe (RN05, AC05)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+      '409':
+        description: Khách hàng đang có chuyến active khác (RN04, AC06)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+/customers/{customerId}/trips:
+  get:
+    tags:
+    - Trips
+    summary: Xem lịch sử chuyến đi (FR11, UC05)
+    parameters:
+    - name: customerId
+      in: path
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters.yaml#/PageParam
+    - $ref: ../components/parameters.yaml#/LimitParam
+    responses:
+      '200':
+        description: Danh sách chuyến đi (AC10)
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: ../components/schemas.yaml#/Trip
+                meta:
+                  $ref: ../components/schemas.yaml#/PageMeta
+/trips/{tripId}:
+  get:
+    tags:
+    - Trips
+    summary: Xem chi tiết / trạng thái / thông tin tài xế / ETA của một chuyến (FR07, FR08, FR09, FR12,
+      UC04)
+    parameters:
+    - $ref: ../components/parameters.yaml#/TripIdParam
+    responses:
+      '200':
+        description: Chi tiết chuyến đi (AC07, AC08)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Trip
+      '404':
+        description: Không tìm thấy chuyến đi
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+/trips/{tripId}/status-history:
+  get:
+    tags:
+    - Trips
+    summary: Xem lịch sử thay đổi trạng thái chuyến đi (FR10, AC09)
+    parameters:
+    - $ref: ../components/parameters.yaml#/TripIdParam
+    responses:
+      '200':
+        description: Danh sách các mốc trạng thái
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: ../components/schemas.yaml#/TripStatusHistory
+/trips/{tripId}/status:
+  patch:
+    tags:
+    - Trips
+    summary: Tài xế cập nhật tiến trình chuyến (FR19, UC11) — không được bỏ bước (RN13, AC18)
+    parameters:
+    - $ref: ../components/parameters.yaml#/TripIdParam
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/UpdateTripStatusRequest
+    responses:
+      '200':
+        description: Trạng thái được cập nhật
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Trip
+      '403':
+        description: Không phải tài xế được gán cho chuyến này (RN14)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+      '409':
+        description: Trạng thái kế tiếp không hợp lệ (bỏ bước — RN13)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error
+/trips/{tripId}/rating:
+  post:
+    tags:
+    - Trips
+    summary: Đánh giá & nhận xét tài xế (FR13, UC06) — chỉ đánh giá một lần (AC12)
+    parameters:
+    - $ref: ../components/parameters.yaml#/TripIdParam
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/RatingRequest
+    responses:
+      '201':
+        description: Lưu đánh giá thành công (AC11)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Rating
+      '409':
+        description: Chuyến đã được đánh giá trước đó (AC12)
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas.yaml#/Error

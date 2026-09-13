@@ -1,0 +1,44 @@
+/reports/trips:
+  get:
+    tags:
+    - Reports
+    summary: Báo cáo số lượng chuyến đi (FR37, UC18, AC30)
+    parameters:
+    - $ref: ../components/parameters.yaml#/FromDateParam
+    - $ref: ../components/parameters.yaml#/ToDateParam
+    responses:
+      '200':
+        description: Số liệu báo cáo theo khoảng thời gian
+/reports/revenue:
+  get:
+    tags:
+    - Reports
+    summary: Báo cáo doanh thu (FR38, UC18, AC30)
+    parameters:
+    - $ref: ../components/parameters.yaml#/FromDateParam
+    - $ref: ../components/parameters.yaml#/ToDateParam
+    responses:
+      '200':
+        description: Số liệu doanh thu theo khoảng thời gian
+/reports/completion-rate:
+  get:
+    tags:
+    - Reports
+    summary: Báo cáo tỷ lệ hoàn thành/hủy chuyến (FR39, UC18, AC30)
+    parameters:
+    - $ref: ../components/parameters.yaml#/FromDateParam
+    - $ref: ../components/parameters.yaml#/ToDateParam
+    responses:
+      '200':
+        description: Tỷ lệ hoàn thành/hủy theo khoảng thời gian
+/reports/driver-performance:
+  get:
+    tags:
+    - Reports
+    summary: Báo cáo hiệu quả hoạt động tài xế (FR40, UC18, AC30)
+    parameters:
+    - $ref: ../components/parameters.yaml#/FromDateParam
+    - $ref: ../components/parameters.yaml#/ToDateParam
+    responses:
+      '200':
+        description: Số liệu hiệu quả tài xế theo khoảng thời gian
